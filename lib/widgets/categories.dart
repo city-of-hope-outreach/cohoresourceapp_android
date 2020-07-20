@@ -1,3 +1,4 @@
+import 'package:cohoresourceapp_android/data/repo/full_database_repo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,8 +10,9 @@ import '../data/model/category_model.dart';
 class Categories extends StatefulWidget {
 
     final List<CategoryModel> categories;
+    final FullDatabaseRepo repo;
 
-    Categories({this.categories});
+    Categories({this.categories, this.repo});
 
   @override
   _CategoriesState createState() => _CategoriesState();
@@ -20,22 +22,17 @@ class _CategoriesState extends State<Categories> {
     void _pushRoute(BuildContext theContext, String title, CategoryModel category) {
         Navigator.push(theContext,
             MaterialPageRoute(
-                builder: (context) => BlocProvider.value(
-                    value: BlocProvider.of<CohoDatabaseBloc>(theContext),
-                    child: ResourceList(title: title, parent: category,),
-                )
+                builder: (context) => ResourceList(
+                    title: title,
+                    parent: category,
+                    repo: widget.repo,),
             ),
         );
     }
 
     @override
   Widget build(BuildContext context) {
-        return BlocBuilder<CohoDatabaseBloc, CohoDatabaseState>(
-            builder: (context, state) {
-                print("Categories building state: $state");
-                return categoriesLoaded(context, widget.categories);
-            },
-        );
+        return categoriesLoaded(context, widget.categories);
   }
 
   @override
@@ -64,15 +61,13 @@ class _CategoriesState extends State<Categories> {
     }
 
     Widget categoriesLoaded(BuildContext context, List<CategoryModel> categories) {
-        List<Widget> listChildren = [];
-
-        categories.forEach((category) {
-           listChildren.add(_tile(context, category));
-           listChildren.add(Divider());
-        });
-
-        return ListView(
-            children: listChildren,
-        );
+        return ListView.separated(
+            itemBuilder: (context, index) {
+                return _tile(context, categories[index]);
+            },
+            separatorBuilder: (context, index) {
+                return Divider();
+            },
+            itemCount: categories.length);
     }
 }

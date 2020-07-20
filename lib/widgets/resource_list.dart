@@ -1,5 +1,6 @@
 import 'package:cohoresourceapp_android/bloc/bloc.dart';
 import 'package:cohoresourceapp_android/data/model/organization_level_model.dart';
+import 'package:cohoresourceapp_android/data/repo/full_database_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,7 +13,9 @@ class ResourceList extends StatefulWidget {
 
   final OrganizationLevelModel parent;
 
-  ResourceList({this.title, this.resources, this.parent});
+  final FullDatabaseRepo repo;
+
+  ResourceList({this.title, this.resources, this.parent, this.repo});
 
   @override
   _ResourceListState createState() => _ResourceListState();
@@ -21,11 +24,11 @@ class ResourceList extends StatefulWidget {
 class _ResourceListState extends State<ResourceList> {
   @override
   Widget build(BuildContext context) {
-    return  BlocBuilder<CohoDatabaseBloc, CohoDatabaseState>(
-      builder: (context, state) {
-        if (state is ResourcesLoadedState) {
-          print('going into Resources loaded state');
-          return resourcesLoaded(context, state.resources);
+    return FutureBuilder(
+      future: widget.repo.fetchResourcesOfParent(widget.parent),
+      builder: (context, AsyncSnapshot<List<ResourceModel>> snapshot) {
+        if (snapshot.hasData) {
+          return resourcesLoaded(context, snapshot.data);
         }
         return loadingIndicator();
       },
@@ -53,7 +56,6 @@ class _ResourceListState extends State<ResourceList> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     print('calling loading resources: ${widget.parent}');
-    BlocProvider.of<CohoDatabaseBloc>(context).add(ResourcesLoadingEvent(parent: widget.parent));
   }
 
   void _pushRoute(BuildContext context, String title) {
@@ -72,9 +74,14 @@ class _ResourceListState extends State<ResourceList> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: ListView(
-        children: listViewChildren(context, resources),
-      ),
+      body: ListView.separated(
+          itemBuilder: (context, index) {
+            return _tile(context, resources[index].name, Icons.description);
+          },
+          separatorBuilder: (context, index) {
+            return Divider();
+          },
+          itemCount: resources.length),
     );
   }
 
@@ -82,7 +89,7 @@ class _ResourceListState extends State<ResourceList> {
     List<Widget> list = [];
     resources.forEach((item) {
       list.add(_tile(context, item.name, Icons.description));
-      list.add(Divider());
+//      list.add(Divider());
     });
 
     return list;

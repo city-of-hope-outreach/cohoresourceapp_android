@@ -1,3 +1,4 @@
+import 'package:cohoresourceapp_android/data/model/organization_level_model.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import '../model/fulldatabase_model.dart';
@@ -112,5 +113,16 @@ class FullDatabaseRepo implements CohoRepo {
 
       return resources;
     });
+  }
+
+  Future<List<ResourceModel>> fetchResourcesOfParent(OrganizationLevelModel parent) {
+    if (parent is CategoryModel) {
+      return fetchResourcesOfCategory(parent);
+    } else if (parent is CountyModel){
+      return fetchResourcesOfCounty(parent);
+    } else { // this shouldn't ever happen
+      List<ResourceModel> emptyList = [];
+      return Future.value(emptyList);
+    }
   }
 }

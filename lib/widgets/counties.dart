@@ -1,4 +1,5 @@
 import 'package:cohoresourceapp_android/bloc/bloc.dart';
+import 'package:cohoresourceapp_android/data/repo/full_database_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,21 +9,23 @@ import '../data/model/county_model.dart';
 class Counties extends StatefulWidget {
 
     final List<CountyModel> counties;
+    final FullDatabaseRepo repo;
 
-    Counties({this.counties});
+    Counties({this.counties, this.repo});
 
-  @override
-  _CountiesState createState() => _CountiesState();
+    @override
+    _CountiesState createState() => _CountiesState();
 }
 
 class _CountiesState extends State<Counties> {
     void _pushRoute(BuildContext theContext, String title, CountyModel county) {
         Navigator.push(theContext,
             MaterialPageRoute(
-                builder: (context) => BlocProvider.value(
-                    value: BlocProvider.of<CohoDatabaseBloc>(theContext),
-                    child: ResourceList(title: title, parent: county,),
-                )
+                builder: (context) =>
+                    ResourceList(
+                        title: title,
+                        parent: county,
+                        repo: widget.repo,),
             ),
         );
     }
@@ -58,15 +61,13 @@ class _CountiesState extends State<Counties> {
     }
 
     Widget countiesLoaded(BuildContext context, List<CountyModel> counties) {
-        List<Widget> listTiles = [];
-
-        counties.forEach((county) {
-           listTiles.add(_tile(context, county));
-           listTiles.add(Divider());
-        });
-
-        return ListView(
-            children: listTiles,
-        );
+        return ListView.separated(
+            itemBuilder: (context, index) {
+                return _tile(context, counties[index]);
+            },
+            separatorBuilder: (context, index) {
+                return Divider();
+            },
+            itemCount: counties.length);
     }
 }
