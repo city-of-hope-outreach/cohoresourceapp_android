@@ -1,6 +1,7 @@
 import 'package:cohoresourceapp_android/bloc/bloc.dart';
 import 'package:cohoresourceapp_android/data/model/organization_level_model.dart';
 import 'package:cohoresourceapp_android/data/repo/full_database_repo.dart';
+import 'package:cohoresourceapp_android/widgets/resource.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -35,17 +36,17 @@ class _ResourceListState extends State<ResourceList> {
     );
   }
 
-  ListTile _tile(BuildContext context, String title, IconData icon) => ListTile(
-    title: Text(title,
+  ListTile _tile(BuildContext context, ResourceModel resource) => ListTile(
+    title: Text(resource.name,
         style: TextStyle(
           fontWeight: FontWeight.w500,
           fontSize: 20,
         )),
     leading: Icon(
-      icon,
+      Icons.description,
       color: Colors.deepOrangeAccent,
     ),
-    onTap: () => _pushRoute(context, title),
+    onTap: () => _pushRoute(context, resource),
   );
 
   Widget loadingIndicator() {
@@ -58,13 +59,10 @@ class _ResourceListState extends State<ResourceList> {
     print('calling loading resources: ${widget.parent}');
   }
 
-  void _pushRoute(BuildContext context, String title) {
+  void _pushRoute(BuildContext context, ResourceModel resource) {
     Navigator.push(context,
       MaterialPageRoute(
-          builder: (context) => BlocProvider.value(
-            value: BlocProvider.of<CohoDatabaseBloc>(context),
-            child: ResourceList(title: title,),
-          )
+          builder: (context) => Resource(resource: resource,),
       ),
     );
   }
@@ -76,22 +74,12 @@ class _ResourceListState extends State<ResourceList> {
       ),
       body: ListView.separated(
           itemBuilder: (context, index) {
-            return _tile(context, resources[index].name, Icons.description);
+            return _tile(context, resources[index]);
           },
           separatorBuilder: (context, index) {
             return Divider();
           },
           itemCount: resources.length),
     );
-  }
-
-  List<Widget> listViewChildren(BuildContext context, List<ResourceModel> resources) {
-    List<Widget> list = [];
-    resources.forEach((item) {
-      list.add(_tile(context, item.name, Icons.description));
-//      list.add(Divider());
-    });
-
-    return list;
   }
 }
