@@ -1,9 +1,7 @@
-import 'package:cohoresourceapp_android/bloc/bloc.dart';
 import 'package:cohoresourceapp_android/data/model/organization_level_model.dart';
 import 'package:cohoresourceapp_android/data/repo/full_database_repo.dart';
 import 'package:cohoresourceapp_android/widgets/resource.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../data/model/resource_model.dart';
 
