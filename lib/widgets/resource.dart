@@ -1,9 +1,11 @@
 import 'package:cohoresourceapp_android/data/model/contact_model.dart';
+import 'package:cohoresourceapp_android/data/model/location_model.dart';
 import 'package:cohoresourceapp_android/data/model/resource_model.dart';
 import 'package:cohoresourceapp_android/data/repo/full_database_repo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Resource extends StatelessWidget {
 
@@ -110,9 +112,22 @@ class Resource extends StatelessWidget {
               }
 
               if (contact.name.length > 0) {
-                  tiles.add(ListTile(title: Text(contact.value), subtitle: Text(contact.name), leading: icon,));
+                  tiles.add(
+                      ListTile(
+                        title: Text(contact.value),
+                        subtitle: Text(contact.name),
+                        leading: icon,
+                        onTap: () => openContact(contact),
+                      )
+                  );
               } else {
-                  tiles.add(ListTile(title: Text(contact.value), leading: icon,));
+                  tiles.add(
+                      ListTile(
+                          title: Text(contact.value),
+                          leading: icon,
+                          onTap: () => openContact(contact),
+                      )
+                  );
               }
           });
         }
@@ -148,5 +163,41 @@ class Resource extends StatelessWidget {
 
           tiles.add(Divider());
         }
+    }
+
+    void openContact(ContactModel contact) {
+        String scheme = "";
+        switch (contact.type) {
+
+          case ContactType.phone:
+            scheme = "tel";
+            break;
+          case ContactType.email:
+            scheme = "mailto";
+            break;
+          case ContactType.website:
+            scheme = "http";
+            break;
+          case ContactType.fax:
+            return;
+            break;
+          case ContactType.errorType:
+            return;
+            break;
+        }
+
+        Uri uri;
+
+        if (scheme.length > 0) {
+            uri = Uri(scheme: scheme, path: contact.value,);
+        } else {
+            uri = Uri(path: contact.value,);
+        }
+
+        launch(uri.toString());
+    }
+
+    void openLocation(LocationModel location) {
+
     }
 }
