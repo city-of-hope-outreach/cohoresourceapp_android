@@ -1,19 +1,17 @@
 import 'package:equatable/equatable.dart';
 
 class ContactModel extends Equatable {
-    final int id;
     final String name;
     final String value;
     final ContactType type;
 
-  ContactModel({this.id, this.name, this.value, this.type});
+  ContactModel({this.name, this.value, this.type});
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props => [name, value, type];
 
   static ContactModel contactFromDynMap(Map<dynamic, dynamic> dynMap) {
       return ContactModel(
-          id: dynMap['id'],
           name: dynMap['name'],
           value: dynMap['value'],
           type: contactTypeFromInt(dynMap['typeInt'])

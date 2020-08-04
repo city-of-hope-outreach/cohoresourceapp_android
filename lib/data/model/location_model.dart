@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 class LocationModel extends Equatable{
-    final int id;
     final String description;
     final String street1;
     final String street2;
@@ -9,14 +8,13 @@ class LocationModel extends Equatable{
     final String state;
     final String zip;
 
-  LocationModel({this.id, this.description, this.street1, this.street2, this.city, this.state, this.zip});
+  LocationModel({this.description, this.street1, this.street2, this.city, this.state, this.zip});
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props => [description, street1, street2, city, state, zip];
 
   static LocationModel locationFromDynMap(Map<dynamic, dynamic> dynMap) {
       return LocationModel(
-          id: dynMap['id'],
           description: dynMap['desc'],
           street1: dynMap['street1'],
           street2: dynMap['street2'],
