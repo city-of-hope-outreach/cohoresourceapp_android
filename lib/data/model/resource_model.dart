@@ -41,7 +41,13 @@ class ResourceModel extends Equatable {
     List<int> categories = [];
 
     if (dynMap.containsKey('categories')) {
-        categories = List<int>.from(dynMap['categories']);
+        dynMap['categories'].forEach((category) {
+           if (category is String) {
+               categories.add(int.parse(category));
+           } else if (category is int) {
+               categories.add(category);
+           }
+        });
     } else {
         print('No category key for ${dynMap['name']}');
     }
@@ -49,7 +55,13 @@ class ResourceModel extends Equatable {
     List<int> counties = [];
 
     if (dynMap.containsKey('counties')) {
-        counties = List<int>.from(dynMap['counties']);
+        dynMap['counties'].forEach((county) {
+            if (county is String) {
+                counties.add(int.parse(county));
+            } else if (county is int) {
+                counties.add(county);
+            }
+        });
     } else {
         print('No county key for ${dynMap['name']}');
     }
