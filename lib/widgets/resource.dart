@@ -91,44 +91,46 @@ class Resource extends StatelessWidget {
           ));
           resource.contacts.forEach((contact) {
               Icon icon;
+              String type = "";
 
               switch (contact.type) {
 
                   case ContactType.phone:
                       icon = Icon(Icons.phone);
+                      type = "Phone";
                       break;
                   case ContactType.email:
                       icon = Icon(Icons.alternate_email);
+                      type = "Email";
                       break;
                   case ContactType.website:
                       icon = Icon(Icons.link);
+                      type = "Website";
                       break;
                   case ContactType.fax:
                       icon = Icon(Icons.mail_outline);
+                      type = "Fax";
                       break;
                   case ContactType.errorType:
                       icon = Icon(Icons.phonelink);
+                      type = "Unknown contact type";
                       break;
               }
 
-              if (contact.name.length > 0) {
-                  tiles.add(
-                      ListTile(
-                        title: Text(contact.value),
-                        subtitle: Text(contact.name),
-                        leading: icon,
-                        onTap: () => openContact(contact),
-                      )
-                  );
-              } else {
-                  tiles.add(
-                      ListTile(
-                          title: Text(contact.value),
-                          leading: icon,
-                          onTap: () => openContact(contact),
-                      )
-                  );
+              String name = contact.name;
+
+              if (name.length == 0) {
+                  name = type;
               }
+
+              tiles.add(
+                  ListTile(
+                      title: Text(contact.value),
+                      subtitle: Text(name),
+                      leading: icon,
+                      onTap: () => openContact(contact),
+                  )
+              );
           });
         }
 
