@@ -38,9 +38,10 @@ class ResourceModel extends Equatable {
   List<Object> get props => [id];
 
   static ResourceModel resourceFromDynMap(Map<dynamic, dynamic> dynMap) {
-    List<int> categories = [];
-
-    if (dynMap.containsKey('categories')) {
+    // add category ids. if the value of the category id is in string format
+    // because firebase doesn't force data types, convert it to int
+      List<int> categories = [];
+      if (dynMap.containsKey('categories')) {
         dynMap['categories'].forEach((category) {
            if (category is String) {
                categories.add(int.parse(category));
@@ -52,8 +53,9 @@ class ResourceModel extends Equatable {
         print('No category key for ${dynMap['name']}');
     }
 
+    // add county ids. if the value of the category id is in string format
+    // because firebase doesn't force data types, convert it to int
     List<int> counties = [];
-
     if (dynMap.containsKey('counties')) {
         dynMap['counties'].forEach((county) {
             if (county is String) {
