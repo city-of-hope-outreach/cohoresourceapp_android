@@ -37,6 +37,34 @@ class ResourceModel extends Equatable {
   @override
   List<Object> get props => [id];
 
+  Map<dynamic, dynamic> toDynMap() {
+      Map<dynamic, dynamic> res = new Map();
+      res['id'] = id;
+      res['name'] = this.name;
+      res['description'] = this.description;
+      res['services'] = this.services;
+      res['documentation'] = this.documentation;
+      res['hours'] = this.hours;
+      res['tags'] = this.tags;
+      res['counties'] = this.countyIDs;
+      res['categories'] = this.categoryIDs;
+
+
+      List<Map<dynamic, dynamic>> contactMaps = [];
+      this.contacts.forEach((contact) {
+          contactMaps.add(contact.toDynMap());
+      });
+      res['contact'] = contactMaps;
+
+      List<Map<dynamic, dynamic>> locationMaps = [];
+      this.locations.forEach((location) {
+          locationMaps.add(location.toDynMap());
+      });
+      res['locations'] = locationMaps;
+
+      return res;
+  }
+
   static ResourceModel resourceFromDynMap(Map<dynamic, dynamic> dynMap) {
     // add category ids. if the value of the category id is in string format
     // because firebase doesn't force data types, convert it to int

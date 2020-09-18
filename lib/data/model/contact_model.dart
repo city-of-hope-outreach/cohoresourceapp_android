@@ -18,7 +18,17 @@ class ContactModel extends Equatable {
       );
   }
 
-  static ContactType contactTypeFromInt(int typeInt) {
+    Map<dynamic, dynamic> toDynMap() {
+        Map<dynamic, dynamic> cont = new Map();
+        cont['name'] = this.name;
+        cont['value'] = this.value;
+        cont['type'] = this.type.index;
+
+        return cont;
+    }
+
+
+    static ContactType contactTypeFromInt(int typeInt) {
       List<ContactType> types = ContactType.values;
       if (typeInt < 0 || typeInt >= types.length) {
           return ContactType.errorType;

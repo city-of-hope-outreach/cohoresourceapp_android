@@ -8,6 +8,16 @@ class CountyModel extends OrganizationLevelModel {
 
     CountyModel({this.id, this.name, this.description, this.icon});
 
+    Map<dynamic, dynamic> toDynMap() {
+        Map<dynamic, dynamic> county = new Map();
+        county['id'] = this.id;
+        county['name'] = this.name;
+        county['description'] = this.description;
+        county['icon'] = this.icon;
+
+        return county;
+    }
+
     static countyFromDynMap(Map<dynamic, dynamic> dynMap) {
         return CountyModel(
             id: dynMap['id'],

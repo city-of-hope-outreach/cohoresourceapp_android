@@ -13,6 +13,18 @@ class LocationModel extends Equatable{
   @override
   List<Object> get props => [description, street1, street2, city, state, zip];
 
+    Map<dynamic, dynamic> toDynMap() {
+        Map<dynamic, dynamic> loc = new Map();
+        loc['desc'] = this.description;
+        loc['street1'] = this.street1;
+        loc['street2'] = this.street2;
+        loc['city'] = this.city;
+        loc['state'] = this.state;
+        loc['zip'] = this.zip;
+
+        return loc;
+    }
+
   static LocationModel locationFromDynMap(Map<dynamic, dynamic> dynMap) {
       return LocationModel(
           description: dynMap['desc'],
