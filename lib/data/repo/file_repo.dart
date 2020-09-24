@@ -30,20 +30,24 @@ class FileRepo {
     }
 
     Future<List<CategoryModel>> readCategories() async {
-        Directory dir = await getApplicationDocumentsDirectory();
-        final file = File('${dir.path}/categories.json');
-        String text = await file.readAsString();
+        try {
+          Directory dir = await getApplicationDocumentsDirectory();
+          final file = File('${dir.path}/categories.json');
+          String text = await file.readAsString();
 
-        dynamic categoriesJSON = jsonDecode(text);
+          dynamic categoriesJSON = jsonDecode(text);
 
-        List<dynamic> listObj = List.from(categoriesJSON);
-        List<CategoryModel> categories = [];
+          List<dynamic> listObj = List.from(categoriesJSON);
+          List<CategoryModel> categories = [];
 
-        listObj.forEach((dynElement) {
-            categories.add(CategoryModel.categoryFromDynMap(dynElement));
-        });
+          listObj.forEach((dynElement) {
+              categories.add(CategoryModel.categoryFromDynMap(dynElement));
+          });
 
-        return categories;
+          return categories;
+        } catch (e) {
+          return Future.error("Cannot read file");
+        }
     }
 
     void saveCounties(List<CountyModel> counties) {
@@ -112,19 +116,23 @@ class FileRepo {
     }
 
     Future<List<ResourceModel>> readResources() async {
-        Directory dir = await getApplicationDocumentsDirectory();
-        final file = File('${dir.path}/resources.json');
-        String text = await file.readAsString();
+        try {
+          Directory dir = await getApplicationDocumentsDirectory();
+          final file = File('${dir.path}/resources.json');
+          String text = await file.readAsString();
 
-        dynamic resourcesJSON = jsonDecode(text);
+          dynamic resourcesJSON = jsonDecode(text);
 
-        List<dynamic> listObj = List.from(resourcesJSON);
-        List<ResourceModel> resources = [];
+          List<dynamic> listObj = List.from(resourcesJSON);
+          List<ResourceModel> resources = [];
 
-        listObj.forEach((dynElement) {
-            resources.add(ResourceModel.resourceFromDynMap(dynElement));
-        });
+          listObj.forEach((dynElement) {
+              resources.add(ResourceModel.resourceFromDynMap(dynElement));
+          });
 
-        return resources;
+          return resources;
+        } catch (e) {
+          return Future.error("Cannot read file");
+        }
     }
 }
