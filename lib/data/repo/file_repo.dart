@@ -84,7 +84,7 @@ class FileRepo {
           List<CountyModel> counties = [];
 
           listObj.forEach((dynElement) {
-              counties.add(CategoryModel.categoryFromDynMap(dynElement));
+              counties.add(CountyModel.countyFromDynMap(dynElement));
           });
 
           return counties;

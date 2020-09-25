@@ -22,7 +22,7 @@ class ContactModel extends Equatable {
         Map<dynamic, dynamic> cont = new Map();
         cont['name'] = this.name;
         cont['value'] = this.value;
-        cont['type'] = this.type.index;
+        cont['typeInt'] = this.type.index;
 
         return cont;
     }
