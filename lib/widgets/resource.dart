@@ -183,15 +183,23 @@ class Resource extends StatelessWidget {
 
   void openContact(ContactModel contact) {
     String scheme = "";
+    String title = "";
+    String action = "";
     switch (contact.type) {
       case ContactType.phone:
         scheme = "tel";
+        title = "Phone";
+        action = "Call";
         break;
       case ContactType.email:
         scheme = "mailto";
+        title = "Email";
+        action = "Send Email";
         break;
       case ContactType.website:
         scheme = "http";
+        title = "Website";
+        action = "Open";
         break;
       case ContactType.fax:
         return;
@@ -214,7 +222,32 @@ class Resource extends StatelessWidget {
       );
     }
 
-    launch(uri.toString());
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(contact.value),
+          actions: <Widget>[
+            RaisedButton(
+              child: Text('Copy'),
+              onPressed: () {
+                FlutterClipboard.copy(contact.value);
+                Navigator.of(context).pop();
+              },
+            ),
+            RaisedButton(
+              child: Text(action),
+              onPressed: () {
+                Navigator.of(context).pop();
+                launch(uri.toString());
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void openLocation(LocationModel location) {
@@ -222,7 +255,7 @@ class Resource extends StatelessWidget {
 
     showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Location'),
