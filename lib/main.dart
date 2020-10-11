@@ -1,4 +1,5 @@
 import 'package:cohoresourceapp_android/data/model/category_model.dart';
+import 'package:cohoresourceapp_android/data/model/full_database_model.dart';
 import 'package:cohoresourceapp_android/test.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,6 @@ class CohoHome extends StatefulWidget {
   static List<Widget> _widgetOptions = <Widget>[
     Categories(),
     Counties(),
-    ErrorMessage("G'Day Mate"),
     Text(
       'Index 2: School',
       style: optionStyle,
@@ -59,6 +59,7 @@ class CohoHome extends StatefulWidget {
 
 class _CohoHomeState extends State<CohoHome> {
   int _selectedIndex = 0;
+  Future<FullDatabaseModel> everyThingFut;
 
   Widget buildForLoadingState() {
     return Center(child: CircularProgressIndicator());
@@ -75,42 +76,67 @@ class _CohoHomeState extends State<CohoHome> {
 
     setState(() {
       _selectedIndex = index;
+      everyThingFut = widget.repo.fetchEverything();
     });
   }
 
   Widget body() {
-    if (_selectedIndex == 0) {
-      return FutureBuilder(
-        future: widget.repo.fetchAllCategories(),
-        builder: (context, AsyncSnapshot<List<CategoryModel>> snapshot) {
-          if (snapshot.hasData) {
-            return Categories(categories: snapshot.data, repo: widget.repo);
-          } else if (snapshot.hasError) {
-            return ErrorMessage("An Internet connection is required to load data on the first launch");
+    // if (_selectedIndex == 0) {
+    //   return FutureBuilder(
+    //     future: widget.repo.fetchAllCategories(),
+    //     builder: (context, AsyncSnapshot<List<CategoryModel>> snapshot) {
+    //       if (snapshot.hasData) {
+    //         return Categories(categories: snapshot.data, repo: widget.repo);
+    //       } else if (snapshot.hasError) {
+    //         return ErrorMessage(errorMsg: "An Internet connection is required to load data on the first launch",
+    //           onRefresh: () => _refresh(),);
+    //       } else {
+    //         return buildForLoadingState();
+    //       }
+    //     },
+    //   );
+    // } else if (_selectedIndex == 1) {
+    //   return FutureBuilder(
+    //     future: widget.repo.fetchAllCounties(),
+    //     builder: (context, AsyncSnapshot<List<CountyModel>> snapshot) {
+    //       if (snapshot.hasData) {
+    //         return Counties(
+    //           counties: snapshot.data,
+    //           repo: widget.repo,
+    //         );
+    //       } else if (snapshot.hasError) {
+    //         return ErrorMessage(errorMsg: "An Internet connection is required to load data on the first launch",
+    //           onRefresh: () => _refresh(),);
+    //       } else {
+    //         return buildForLoadingState();
+    //       }
+    //     },
+    //   );
+    // } else {
+    //   return null;
+    // }
+    
+    return FutureBuilder(
+      future: everyThingFut,
+      builder: (context, AsyncSnapshot<FullDatabaseModel> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return buildForLoadingState();
+        }
+
+        if (snapshot.hasData) {
+          if (_selectedIndex ==  0) {
+            return Categories(categories: snapshot.data.categories, repo: widget.repo);
           } else {
-            return buildForLoadingState();
+            return Counties(counties: snapshot.data.counties, repo: widget.repo);
           }
-        },
-      );
-    } else if (_selectedIndex == 1) {
-      return FutureBuilder(
-        future: widget.repo.fetchAllCounties(),
-        builder: (context, AsyncSnapshot<List<CountyModel>> snapshot) {
-          if (snapshot.hasData) {
-            return Counties(
-              counties: snapshot.data,
-              repo: widget.repo,
-            );
-          } else if (snapshot.hasError) {
-            return ErrorMessage("An Internet connection is required to load data on the first launch");
-          } else {
-            return buildForLoadingState();
-          }
-        },
-      );
-    } else {
-      return null;
-    }
+        } else if (snapshot.hasError) {
+          return ErrorMessage(errorMsg: "An Internet connection is required to load data on the first launch",
+            onRefresh: () => _refresh(),);
+        } else {
+          return buildForLoadingState();
+        }
+      },
+    );
   }
 
   @override
@@ -145,9 +171,17 @@ class _CohoHomeState extends State<CohoHome> {
     );
   }
 
+  void _refresh() {
+    setState(() {
+      everyThingFut = widget.repo.fetchEverything();
+    });
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
+    everyThingFut = widget.repo.fetchEverything();
 
     print("main did change dependencies");
   }
