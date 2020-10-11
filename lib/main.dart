@@ -91,11 +91,7 @@ class _CohoHomeState extends State<CohoHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(this.widget.title),
-      ),
+      appBar: _appBar,
       body: body(),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -108,10 +104,6 @@ class _CohoHomeState extends State<CohoHome> {
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             title: Text('Search'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            title: Text('Settings'),
           ),
         ],
         currentIndex: _selectedIndex,

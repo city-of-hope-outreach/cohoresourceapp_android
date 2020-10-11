@@ -95,4 +95,66 @@ class FullDatabaseRepo implements CohoRepo {
       return Future.value(emptyList);
     }
   }
+
+  Future<List<ResourceModel>> searchResources(String query) async {
+    if (!_databaseModel.loaded) {
+      await fetchEverything();
+    }
+
+    List<String> queries = query.split(' ');
+
+    List<ResourceModel> filteredResources = [];
+
+    // prioritize name first
+    _databaseModel.resources.forEach((res) {
+      queries.forEach((str) {
+        if (res.name.toLowerCase().contains(str.toLowerCase())
+            && !filteredResources.contains(res)) {
+          filteredResources.add(res);
+        }
+      });
+    });
+
+    // tags
+    _databaseModel.resources.forEach((res) {
+      queries.forEach((str) {
+        if (res.tags.toLowerCase().contains(str.toLowerCase())
+            && !filteredResources.contains(res)) {
+          filteredResources.add(res);
+        }
+      });
+    });
+
+    // description
+    _databaseModel.resources.forEach((res) {
+      queries.forEach((str) {
+        if (res.description.toLowerCase().contains(str.toLowerCase())
+            && !filteredResources.contains(res)) {
+          filteredResources.add(res);
+        }
+      });
+    });
+
+    // services
+    _databaseModel.resources.forEach((res) {
+      queries.forEach((str) {
+        if (res.services.toLowerCase().contains(str.toLowerCase())
+            && !filteredResources.contains(res)) {
+          filteredResources.add(res);
+        }
+      });
+    });
+
+    // services
+    _databaseModel.resources.forEach((res) {
+      queries.forEach((str) {
+        if (res.services.toLowerCase().contains(str.toLowerCase())
+            && !filteredResources.contains(res)) {
+          filteredResources.add(res);
+        }
+      });
+    });
+
+    return filteredResources;
+  }
 }
