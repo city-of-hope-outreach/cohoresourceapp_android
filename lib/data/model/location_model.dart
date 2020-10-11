@@ -11,6 +11,33 @@ class LocationModel extends Equatable{
   LocationModel({this.description, this.street1, this.street2, this.city, this.state, this.zip});
 
   @override
+  String toString() {
+    String str = '';
+    if (street1 != null && street1 != '') {
+        str += '$street1 ';
+    }
+
+    if (street2 != null && street2 != '') {
+        str += '$street2 ';
+    }
+
+    if (city != null && city != '') {
+        str += '$city, ';
+    }
+
+    if (state != null && state != '') {
+        str += '$state ';
+    }
+
+    if (zip != null && zip != '') {
+        str += '$zip';
+    }
+
+
+    return str;
+  }
+
+  @override
   List<Object> get props => [description, street1, street2, city, state, zip];
 
     Map<dynamic, dynamic> toDynMap() {
