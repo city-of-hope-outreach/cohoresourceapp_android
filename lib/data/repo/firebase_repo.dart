@@ -7,6 +7,7 @@ import 'package:firebase_database/firebase_database.dart';
 class FirebaseRepo {
   final DatabaseReference _databaseRef = FirebaseDatabase.instance.reference();
   final FileRepo _fileRepo;
+  final int _timeout = 12;
 
   FirebaseRepo(this._fileRepo);
 
@@ -23,7 +24,7 @@ class FirebaseRepo {
       return counties;
     }, onError: (error) {
       throw ("Database Error");
-    }).timeout(Duration(seconds: 4), onTimeout: () {
+    }).timeout(Duration(seconds: _timeout), onTimeout: () {
       throw ("Connection Timed Out");
     });
   }
@@ -41,7 +42,7 @@ class FirebaseRepo {
       return categories;
     }, onError: (error) {
       throw ("Database Error");
-    }).timeout(Duration(seconds: 2), onTimeout: () {
+    }).timeout(Duration(seconds: _timeout), onTimeout: () {
       throw ("Connection Timed Out");
     });
   }
@@ -62,7 +63,7 @@ class FirebaseRepo {
       return resources;
     }, onError: (error) {
       throw ("Database Error");
-    }).timeout(Duration(seconds: 4), onTimeout: () {
+    }).timeout(Duration(seconds: _timeout), onTimeout: () {
       throw ("Connection Timed Out");
     });
   }

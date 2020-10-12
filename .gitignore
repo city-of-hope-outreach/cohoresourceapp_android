@@ -35,3 +35,9 @@ lib/generated_plugin_registrant.dart
 
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+# ignoring the ios resources folder because it is irrelevant
+ios
+
+# ignoring private api keys because privacy
+google-services.json

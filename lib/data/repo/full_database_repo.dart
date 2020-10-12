@@ -2,6 +2,7 @@ import 'package:cohoresourceapp_android/data/model/full_database_model.dart';
 import 'package:cohoresourceapp_android/data/model/organization_level_model.dart';
 import 'package:cohoresourceapp_android/data/repo/file_repo.dart';
 import 'package:cohoresourceapp_android/data/repo/firebase_repo.dart';
+import 'package:connectivity/connectivity.dart';
 
 import '../model/category_model.dart';
 import '../model/county_model.dart';
@@ -34,14 +35,47 @@ class FullDatabaseRepo implements CohoRepo {
       return _databaseModel;
     } else {
       try {
-        _databaseModel.categories = await _firebaseRepo.fetchAllCategoriesFromFirebase()
-            .catchError((e) => _fileRepo.readCategories().then((value) => value));
+        ConnectivityResult connectivityResult =
+            await Connectivity().checkConnectivity();
 
-        _databaseModel.counties = await _firebaseRepo.fetchAllCountiesFromFirebase()
-            .catchError((e) => _fileRepo.readCounties().then((value) => value));
+        if (connectivityResult == ConnectivityResult.none) {
+          List<Future<dynamic>> futures = [
+            _fileRepo
+                .readCategories()
+                .then((value) => _databaseModel.categories = value),
+            _fileRepo
+                .readCounties()
+                .then((value) => _databaseModel.counties = value),
+            _fileRepo
+                .readResources()
+                .then((value) => _databaseModel.resources = value)
+          ];
 
-        _databaseModel.resources = await _firebaseRepo.fetchAllResourcesFromFirebase()
-            .catchError((e) => _fileRepo.readResources().then((value) => value));
+          await Future.wait(futures);
+        } else {
+          List<Future<dynamic>> futures = [
+            _firebaseRepo
+                .fetchAllCategoriesFromFirebase()
+                .then((value) => _databaseModel.categories = value)
+                .catchError((e) => _fileRepo
+                    .readCategories()
+                    .then((value) => _databaseModel.categories = value)),
+            _firebaseRepo
+                .fetchAllCountiesFromFirebase()
+                .then((value) => _databaseModel.counties = value)
+                .catchError((e) => _fileRepo
+                    .readCounties()
+                    .then((value) => _databaseModel.counties = value)),
+            _firebaseRepo
+                .fetchAllResourcesFromFirebase()
+                .then((value) => _databaseModel.resources = value)
+                .catchError((e) => _fileRepo
+                    .readResources()
+                    .then((value) => _databaseModel.resources = value))
+          ];
+
+          await Future.wait(futures);
+        }
 
         _databaseModel.loaded = true;
         return _databaseModel;
