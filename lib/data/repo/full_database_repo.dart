@@ -135,11 +135,18 @@ class FullDatabaseRepo implements CohoRepo {
       await fetchEverything();
     }
 
-    List<String> queries = query.split(' ');
-
     List<ResourceModel> filteredResources = [];
 
-    // prioritize name first
+    // prioritize direct name matches first
+    _databaseModel.resources.forEach((res) {
+      if (res.name.toLowerCase().contains(query.toLowerCase())) {
+        filteredResources.add(res);
+      }
+    });
+
+    List<String> queries = query.split(' ');
+
+    // then do name
     _databaseModel.resources.forEach((res) {
       queries.forEach((str) {
         if (res.name.toLowerCase().contains(str.toLowerCase())
