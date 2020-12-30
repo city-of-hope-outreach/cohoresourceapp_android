@@ -41,3 +41,5 @@ ios
 
 # ignoring private api keys because privacy
 google-services.json
+key.properties
+key.jks
