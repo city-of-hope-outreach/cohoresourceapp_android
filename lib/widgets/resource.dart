@@ -121,7 +121,7 @@ class Resource extends StatelessWidget {
             type = "Website";
             break;
           case ContactType.fax:
-            icon = Icon(Icons.mail_outline);
+            icon = Icon(Icons.local_printshop);
             type = "Fax";
             break;
           case ContactType.errorType:

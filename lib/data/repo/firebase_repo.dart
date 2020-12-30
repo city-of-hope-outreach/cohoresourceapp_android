@@ -53,7 +53,6 @@ class FirebaseRepo {
 
       List<ResourceModel> resources = [];
 
-      print('building ${dynMap.length} resources...');
       dynMap.forEach((key, value) {
         ResourceModel resource = ResourceModel.resourceFromDynMap(value);
         resources.add(resource);

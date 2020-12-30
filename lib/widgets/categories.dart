@@ -1,4 +1,5 @@
 import 'package:cohoresourceapp_android/data/repo/full_database_repo.dart';
+import 'package:cohoresourceapp_android/data/repo/icons_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -48,7 +49,7 @@ class _CategoriesState extends State<Categories> {
               fontSize: 20,
           )),
       leading: Icon(
-          Icons.apps,
+          IconsUtil.iconForCat(category),
           color: Colors.blue[500],
       ),
       onTap: () => _pushRoute(context, category.name, category),
