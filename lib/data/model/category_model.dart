@@ -1,12 +1,7 @@
 import './organization_level_model.dart';
 
 class CategoryModel extends OrganizationLevelModel {
-    final int id;
-    final String name;
-    final String description;
-    final String icon;
-
-    CategoryModel({this.id, this.name, this.description, this.icon});
+    CategoryModel({int id, String name, String description, String icon}): super(id: id, name: name, description: description, icon: icon);
 
     Map<dynamic, dynamic> toDynMap() {
         Map<dynamic, dynamic> cat = new Map();

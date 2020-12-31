@@ -1,5 +1,6 @@
 import 'package:cohoresourceapp_android/data/model/resource_model.dart';
 import 'package:cohoresourceapp_android/data/repo/full_database_repo.dart';
+import 'package:cohoresourceapp_android/data/repo/icons_util.dart';
 import 'package:cohoresourceapp_android/widgets/resource.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flappy_search_bar/search_bar_style.dart';
@@ -38,7 +39,7 @@ class _SearchState extends State<Search> {
                     fontSize: 20,
                   )),
               leading: Icon(
-                Icons.description,
+                IconsUtil.iconForResource(resource, widget.repo),
                 color: Colors.deepOrangeAccent,
               ),
               onTap: () => _pushRoute(context, resource),

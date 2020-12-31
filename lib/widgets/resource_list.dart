@@ -1,5 +1,6 @@
 import 'package:cohoresourceapp_android/data/model/organization_level_model.dart';
 import 'package:cohoresourceapp_android/data/repo/full_database_repo.dart';
+import 'package:cohoresourceapp_android/data/repo/icons_util.dart';
 import 'package:cohoresourceapp_android/widgets/resource.dart';
 import 'package:flutter/material.dart';
 
@@ -41,7 +42,7 @@ class _ResourceListState extends State<ResourceList> {
           fontSize: 20,
         )),
     leading: Icon(
-      Icons.description,
+      IconsUtil.iconForResource(resource, widget.repo),
       color: Colors.deepOrangeAccent,
     ),
     onTap: () => _pushRoute(context, resource),

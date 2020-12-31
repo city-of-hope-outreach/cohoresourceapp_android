@@ -1,4 +1,6 @@
 import 'package:cohoresourceapp_android/data/model/category_model.dart';
+import 'package:cohoresourceapp_android/data/model/resource_model.dart';
+import 'package:cohoresourceapp_android/data/repo/full_database_repo.dart';
 import 'package:flutter/material.dart';
 
 class IconsUtil {
@@ -47,5 +49,14 @@ class IconsUtil {
         }
 
         return icon;
+    }
+
+    static IconData iconForResource(ResourceModel res, FullDatabaseRepo repo) {
+        List<CategoryModel> cats = repo.categoriesOfResource(res);
+        if (cats.length > 0) {
+            return iconForCat(cats[0]);
+        }
+
+        return Icons.description;
     }
 }

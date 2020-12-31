@@ -198,4 +198,8 @@ class FullDatabaseRepo implements CohoRepo {
 
     return filteredResources;
   }
+
+  List<CategoryModel> categoriesOfResource(ResourceModel res) {
+    return _databaseModel.categoriesOfResource(res);
+  }
 }

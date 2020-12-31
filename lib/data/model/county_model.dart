@@ -1,12 +1,7 @@
 import './organization_level_model.dart';
 
 class CountyModel extends OrganizationLevelModel {
-    final int id;
-    final String name;
-    final String description;
-    final String icon;
-
-    CountyModel({this.id, this.name, this.description, this.icon});
+    CountyModel({int id, String name, String description, String icon}): super(id: id, name: name, description: description, icon: icon);
 
     Map<dynamic, dynamic> toDynMap() {
         Map<dynamic, dynamic> county = new Map();
